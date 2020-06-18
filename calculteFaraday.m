@@ -49,7 +49,7 @@ if(p==1)
     elseif (geometry==0 && Rx==Ry)
        FillKapaCylinderAntiSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
     else
-        FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1);
+        FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
         %FillKapa1D(nGx,nGy,epsa,epsb,L,R,Na,a1,a2,d1);
     end
     

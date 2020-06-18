@@ -7,7 +7,11 @@
 //GEOMETRY
 0
 //Rx Ry
-.504	.504
+.504	.350
+//fi  anticlockiwise angle of elipse axis with x-axis.  angle is given in degrees.
+0
+//theta  angle of incident light in degrees. theta =0 means the light direction is perpendicular to the slab
+0
 //CRYSTAL CONSTANT
 // ax        ay
 1.17	1.17
@@ -21,13 +25,13 @@
 1. 	1.	1. 	0.0
 //Na
 // number of mile ha
-16
+2
 //Transmittivity  FaradayRotation
 1	1
 // WN1	WN2 DIVISION
 .3	.9	216
 // NGX NGY
-7	180
+7	14
 //PlotFouriesSeries   Plot3DVectors
 0	0
 

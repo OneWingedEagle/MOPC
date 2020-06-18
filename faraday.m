@@ -109,7 +109,7 @@ for p=1:1*cf*ndiv+1
     k1=2*pi*Fn(p)/a;
     
     
-    [Ts Rs, Fs]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ax,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor);
+    [Ts Rs, Fs]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ax,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
            
       if(real(Ts)>1) 
         Ts=1;
@@ -127,8 +127,22 @@ t2=cputime;
 comptation_time=t2-t1;
 comptation_time;
         
-        Tr'
-        Tt'
+        Tr';
+        Tt';
+		
+result(1*cf*ndiv+1,3);
+
+  for p=1:1*cf*ndiv+1
+  
+  result(p,1)= Fn(p);
+  result(p,2)= Tr(p);
+  result(p,3)= Tt(p);
+  end
+  
+  disp('Results:');
+  disp('[wn *  Rotation * Transmitance ]');	
+  disp(result);
+
   
 if(rotation &&length(Tr)>1)
                 figure(1)
