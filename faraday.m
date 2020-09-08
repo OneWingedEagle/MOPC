@@ -39,24 +39,34 @@ eps3=numbs(2);
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
+ndata=length(numbs)
+
 epsbx=numbs(1);
+if(ndata>1)
 epsby=numbs(2);
 epsbz=numbs(3);
 gamab=numbs(4);
-
+end
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
 epsax=numbs(1);
+if(ndata>1)
 epsay=numbs(2);
 epsaz=numbs(3);
 gamaa=numbs(4);
+end
 
+if(ndata>1)
 
 epsb=[epsbx 0 -1i*gamab;0 epsby 0;1i*gamab 0 epsbz ];
 
 epsa=[epsax 0 -1i*gamaa;0 epsay 0;1i*gamaa 0 epsaz ];
+else
+epsb=[epsbx];
 
+epsa=[epsax];
+endif
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
@@ -109,7 +119,7 @@ for p=1:1*cf*ndiv+1
     k1=2*pi*Fn(p)/a;
     
     
-    [Ts Rs,Fs]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ax,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
+    [Ts Rs, Fs]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ax,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
            
       if(real(Ts)>1) 
         Ts=1;

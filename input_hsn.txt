@@ -25,13 +25,13 @@
 1. 	1.	1. 	0.0
 //Na
 // number of mile ha
-16
+1
 //Transmittivity  FaradayRotation
 1	0
 // WN1	WN2 DIVISION
-.3	.4	36
+.8 .9	36
 // NGX NGY
-3	50
+4 6
 //PlotFouriesSeries   Plot3DVectors
 0	0
 

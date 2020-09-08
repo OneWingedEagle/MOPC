@@ -1,5 +1,8 @@
 function [Ts Rs Fr ]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi)
 
+
+nk=size(epsb,2);
+
 twoMat=1;
 
 d=d1+d2;
@@ -27,6 +30,10 @@ dd=Lx1;
 
 E0=[0 0 1]';
 
+if(nk==1) 
+E0=[1];
+endif
+
 
 kx=k1*sind(theta);
 k1y=k1*cosd(theta);
@@ -38,7 +45,6 @@ by=pi/L;
 pph=2/pi;
 
 
-nk=size(epsb,2);
 
 if(p==1)
     disp('Computing the Fourier series ..');
@@ -47,13 +53,19 @@ if(p==1)
         FillKapaTriang(nGx,nGy,epsa,epsb,L,R,Na,a1,a2);  %triangular
         %lattivce not implemented properly.
     elseif (geometry==0 && Rx==Ry)
-       FillKapaCylinderAntiSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
+        if(nk==3)
+         FillKapaCylinderAntiSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
+       else
+        FillKapaCylinderSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
+       endif
     else
         FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
         %FillKapa1D(nGx,nGy,epsa,epsb,L,R,Na,a1,a2,d1);
     end
+
     
     if(plotFT)
+        
         
         ndx=50;
  	ndy=50*Na;
@@ -289,7 +301,6 @@ bN=zeros(nk*(numG+2*(Lx1)),1);
 
 disp('Computing matrix, step 2...');
 
-if(twoMat)
     NN=single(zeros(nk*(numG+2*(Lx1))));
 
     for Gx=1:size(NN,1)
@@ -297,8 +308,7 @@ if(twoMat)
             NN(Gx,Gy)=single(1e-10+1i*1e-10);
         end
     end
-    
-end
+
 
 countG=0;
 
@@ -311,41 +321,24 @@ for Gx=-nGx:nGx
         
         countG=countG+1;
         for k=1:nk
-            if(twoMat)
                 NN((countG-1)*nk+k,(countG-1)*nk+k)= w2c2;
-            else
-                MM((countG-1)*nk+k,(countG-1)*nk+k)= MM((countG-1)*nk+k,(countG-1)*nk+k)+w2c2;
-            end
         end
         
         if(mod(Gy,2)==0)
             for k=1:nk
-                if(twoMat)
-                    NN((countG-1)*nk+k,(numG+Gxp-1)*nk+k)=-pph/Gy*w2c2;
-                else
-                    MM((countG-1)*nk+k,(numG+Gxp-1)*nk+k)=MM((countG-1)*nk+k,(numG+Gxp-1)*nk+k)-pph/Gy*w2c2;
-                end
+                     NN((countG-1)*nk+k,(numG+Gxp-1)*nk+k)=-pph/Gy*w2c2;
             end
         else
             for k=1:nk
-                if(twoMat)
                     NN((countG-1)*nk+k,(numG+Gxp-1)*nk+k)=pph/Gy*w2c2;
-                else
-                    MM((countG-1)*nk+k,(numG+Gxp-1)*nk+k)= MM((countG-1)*nk+k,(numG+Gxp-1)*nk+k)+pph/Gy*w2c2;
-                end
+
             end
         end
         
         for k=1:nk
-            if(twoMat)
+
                 NN((countG-1)*nk+k,(numG+Gxpp-1)*nk+k)=pph/Gy*w2c2;
-            else
-                MM((countG-1)*nk+k,(numG+Gxpp-1)*nk+k)=MM((countG-1)*nk+k,(numG+Gxpp-1)*nk+k)+pph/Gy*w2c2;
-            end
-            
-            
-            
-            
+      
             if(Gx==0)
                 
                 bN((countG-1)*nk+k)=-pph/Gy*w2c2*E0(k);
@@ -356,8 +349,6 @@ for Gx=-nGx:nGx
     end
 end
 
-
-real(MM);
 
 for Gx=-nGx:nGx
     Gxp=nGx+1+Gx;
@@ -384,7 +375,7 @@ for Gx=-nGx:nGx
     
     for k=1:nk
         
-        if(twoMat)
+       
             if(k~=2)
                 NN((numG+Gxp-1)*nk+k,(numG+Gxp-1)*nk+k)=1;
                 
@@ -401,25 +392,6 @@ for Gx=-nGx:nGx
             
                 NN((numG+Gxpp-1)*nk+k,(numG+Gxpp-1)*nk+k)=1;
             end
-        else
-            if(k~=2)
-                MM((numG+Gxp-1)*nk+k,(numG+Gxp-1)*nk+k)=1;
-                
-                
-                MM((numG+Gxp-1)*nk+k,(numG+Gxpp-1)*nk+k)=-(1i*L*krny+1);
-                
-                
-                NN((numG+Gxpp-1)*nk+k,(numG+Gxp-1)*nk+k)=-(1i*L*ktny-1);
-                
-                MM((numG+Gxpp-1)*nk+k,(numG+Gxpp-1)*nk+k)=-1;
-            else
-                
-                MM((numG+Gxp-1)*nk+k,(numG+Gxp-1)*nk+k)=1;
-            
-                MM((numG+Gxpp-1)*nk+k,(numG+Gxpp-1)*nk+k)=1;
-            end
-            
-        end
         
         if(Gx==0)
                       
@@ -434,24 +406,20 @@ end
 
 bN=bN+bE;
 
+  
 disp('solving matrix...');
 
-if(twoMat)
-    NN=NN+MM;   
-    x=linsolve(NN,bN);
-else
 
-    x=linsolve(MM,bN);
-end
-% figure(12);
-% surf(imag(NN(1:end,1:end)));
-% plot(real(x),'g');
-% hold on
+  NN=NN+MM;   
 
-Anm=zeros(2*nGx+1,nGy,3);
-Tn=zeros(2*nGx+1,3);
+
+  x=linsolve(NN,bN);
+
+
+Anm=zeros(2*nGx+1,nGy,nk);
+Tn=zeros(2*nGx+1,nk);
 Tn2=zeros(2*nGx+1,1);
-Rn=zeros(2*nGx+1,3);
+Rn=zeros(2*nGx+1,nk);
 Rn2=zeros(2*nGx+1,1);
 
 ix=0;
@@ -629,6 +597,7 @@ if(plotWave)
 end
 
 
+if(nk==3)
 
 tn0=E2(1,1,1)/E2(1,1,3);
 
@@ -680,6 +649,7 @@ end
 
 Fr=(angs(nan)-ang0);
 
+endif
 %Eout=sqrt(E2(1,nL,1)^2+E2(1,nL,2)^2+E2(1,nL,3)^2);
 
 if(plotWave)

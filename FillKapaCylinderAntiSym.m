@@ -1,16 +1,21 @@
 function FillKapaCylinderAntiSym(nGx,nGy,epsa,epsb,L,R,Na,a1,a2,d1)
 global Kapa;
 
+nk=length(epsa);
 
 invepsa1=inv(epsa);
-
-invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))];
-
 invepsb1=inv(epsb);
 
+if(nk==1)
+
+invepsa=[invepsa1(1,1)];
+invepsb=[invepsb1(1,1)];
+
+else
+invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))];
 invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))];
 
-nk=size(invepsb,2);
+endif
 
 ff=Na*pi*R*R/(a1*L);
 d11=d1/L;
