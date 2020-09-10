@@ -1,7 +1,11 @@
 function FillKapaCylinderAntiSym(nGx,nGy,epsa,epsb,L,R,Na,a1,a2,d1)
 global Kapa;
 
-nk=length(epsa);
+disp("anti-sym");
+nk=4;
+if(length(epsa)==1)
+nk=1;
+endif
 
 invepsa1=inv(epsa);
 invepsb1=inv(epsb);

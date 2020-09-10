@@ -119,7 +119,7 @@ for p=1:1*cf*ndiv+1
     k1=2*pi*Fn(p)/a;
     
     
-    [Ts Rs, Fs]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ax,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
+    [Ts Rs,Fs]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ax,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
            
       if(real(Ts)>1) 
         Ts=1;

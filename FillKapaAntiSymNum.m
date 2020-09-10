@@ -1,14 +1,23 @@
 function FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi)
 
+nk=4;
+if(length(epsa)==1)
+nk=1;
+endif
+
 invepsa1=inv(epsa);
-
-invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))];
-
 invepsb1=inv(epsb);
 
+if(nk==1)
+
+invepsa=[invepsa1(1,1)];
+invepsb=[invepsb1(1,1)];
+
+else
+invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))];
 invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))];
 
-nk=length(invepsa);
+endif
 
 global Kapa;
 
