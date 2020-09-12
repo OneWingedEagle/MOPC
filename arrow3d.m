@@ -109,7 +109,7 @@ h=surf(X1,Y1,Z1,'facecolor',colr,'edgecolor','none');
 
 light('Color','r')
 
-lighting phong
+#lighting phong
 end
 
 

@@ -124,7 +124,7 @@ end
 
 
 nL=size(E,2);
-fid = fopen('C:\\Users\\Hassan\\\Documents\MATLAB\\myFields.txt','wt');  % Note the 'wt' for writing in text mode
+fid = fopen('myFields.txt','wt');  % Note the 'wt' for writing in text mode
 
 fprintf(fid,'displacement\n');
 fprintf(fid,'3\n');

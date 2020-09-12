@@ -1,5 +1,6 @@
-function [Ts Rs Fr ]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi)
 
+function [Ts Rs Fr ]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi)
+  
 
 nk=size(epsb,2);
 
@@ -16,7 +17,7 @@ global bE;
 
 w2c2=(k1)^2;
 
-L=(Na-1)*a2+2*(Rx+d);
+L=(Na-1)*a2+2*(Ry+d);
 
 Lx1=2*nGx+1;
 Lx2=3*nGx+2;
@@ -42,12 +43,13 @@ bx=2*pi/a1;
 
 by=pi/L;
 
+
 pph=2/pi;
 
 
 
 if(p==1)
-    disp('Computing the Fourier series ..');
+    disp('Computing Fourier series ..');
     Kapa=zeros(4*nGx+1,4*nGy+1,4);
     if(triang)
         FillKapaTriang(nGx,nGy,epsa,epsb,L,R,Na,a1,a2);  %triangular
@@ -59,24 +61,26 @@ if(p==1)
         FillKapaCylinderSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
        endif
     else
-       if(geometry==1 && nGx==0)        
+ %      if(geometry==1 && nGx==0)        
 %       FillKapa1D(nGx,nGy,epsa,epsb,L,Ry,Na,a1,a2,d1);
-        FillKapa1DAntiSym(nGx,nGy,epsa,epsb,L,Ry,Na,a1,a2,d1);
-       else
+#        FillKapa1DAntiSym(nGx,nGy,epsa,epsb,L,Ry,Na,a1,a2,d1);
+ %      else
         FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
-        endif
+
+ %       endif
     end
 
     
-    if(plotFT)
+ if(plotFT)
+       
+  by1=by;
         
-        
-        ndx=50;
- 	ndy=50*Na;
+  ndx=20;
+ 	ndy=20*Na;
         
         x=linspace(-a1/2,a1/2,ndx);
         y=linspace(0,L,ndy);
-        
+      
         [xx yy]=ndgrid(x,y);
         
         zz=zeros(size(xx));
@@ -90,14 +94,13 @@ if(p==1)
                 for n=-nGx:nGx
                     for m=-nGy:nGy
                         Gn=bx*n;
-                        Gm=by*m;
+                        Gm=by1*m;
 
                         TT=Kapa(n+2*nGx+1,m+2*nGy+1,1);
-                        
                         tt=tt+TT*exp(1i*(Gn*x1+Gm*y1));
                     end
                 end
-                
+
                 zz(ix,iy)=real(tt);
             end
         end
@@ -105,7 +108,6 @@ if(p==1)
         
         X=abs(Kapa(:,:,1));
 
-        
         figure(4);
 
         surf(xx,yy,zz);
@@ -113,8 +115,8 @@ if(p==1)
         %  surf(X);
         axis equal;
         set(gca,'DataAspectRatio',[1 1 .05]);
-        return;
-    end
+%        return;
+  end
 
 
     disp('Computing matrix, step 1...');
@@ -416,9 +418,7 @@ disp('solving matrix...');
 
   NN=NN+MM;   
 
-
   x=linsolve(NN,bN);
-
 
 Anm=zeros(2*nGx+1,nGy,nk);
 Tn=zeros(2*nGx+1,nk);

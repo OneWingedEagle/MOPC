@@ -72,7 +72,6 @@ line=getNewDataLine(fid);
 numbs = str2num(line);
 Na=numbs(1);
 
-
 line=getNewDataLine(fid);
 numbs = str2num(line);
 transmit=numbs(1);
@@ -88,8 +87,8 @@ ndiv=numbs(3);
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
-nGx=numbs(1);
-nGy=numbs(2);
+nGx=numbs(1)
+nGy=numbs(2)
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
@@ -107,8 +106,6 @@ t1=cputime;
 
 dwn=(wn2-wn1)/ndiv;
 
-
-
 cf=(plotWave==0);
 
 for p=1:1*cf*ndiv+1
@@ -116,16 +113,16 @@ for p=1:1*cf*ndiv+1
     p
     
     Fn(p)=wn1+dwn*(p-1);
-    k1=2*pi*Fn(p)/a;
+    k1=pi*Fn(p)/ax;
     
     
-    [Ts Rs,Fs]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ax,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
+    [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
            
       if(real(Ts)>1) 
         Ts=1;
       end
       
-    Tr(p)=real(Fs);
+    Tr(p)=real(Fr);
     Tt(p)=real(Ts);
     
     uu=Ts+Rs;
@@ -139,16 +136,28 @@ comptation_time;
         
         Tr';
         Tt';
-		
+	
 result=zeros(1*cf*ndiv+1,3);
+
+fid = fopen('results.txt','wt');  % Note the 'wt' for writing in text mode
+
+fprintf(fid,'[nGx *  nGy]\n');  
+  
+fprintf(fid,'%d\t%d\n',nGx,nGy);
+fprintf(fid,'[wn *  Rotation * Transmitance ]\n');  
+
 
   for p=1:1*cf*ndiv+1
   
   result(p,1)= Fn(p);
   result(p,2)= Tr(p);
   result(p,3)= Tt(p);
+
+  fprintf(fid,'%f\t%f\t%f\n',result(p,1),result(p,2),result(p,3));
+
   end
-  
+    fclose(fid);
+     
   disp('Results:');
   disp('[wn *  Rotation * Transmitance ]');	
   disp(result);

@@ -22,8 +22,9 @@ endif
 global Kapa;
 
 
-ngrid=30;
+ngrid=10;
 Lh=Na*a2-a2/2;
+
 d11=d1/L;
 
 invep=zeros(ngrid,Na*2*ngrid,nk);
@@ -47,7 +48,8 @@ for n=0:2*Na-1
               if(geometry==0)
                   inside=(countXr/Rx)^2+(countYr/Ry)^2<=1;
               else
-                inside=abs(countXr/Rx)<=1 && abs(countYr/Ry)<=1;  
+              
+              inside=abs(countXr/Rx)<=1 && abs(countYr/Ry)<=1;
               end
     
             
@@ -73,12 +75,14 @@ for n=0:2*Na-1
     end
 end
 
+
 for n=1:length(ySet)/2
   if(k==4)
     inveps(:,n,nk)=-inveps(:,n,nk);
   end
 end
 
+%ySet
 
 MtNt=(length(xSet)-1)*(length(ySet)-1);
 %The next loop computes the Fourier expansion coefficients
@@ -110,6 +114,36 @@ for dGx=-2*nGx:2*nGx
     end
 end
 
+
 Kapa=Kapa/MtNt;
+
+##Kapa=Kapa*0;
+##
+##for dGx=-2*nGx:2*nGx
+##    
+##   for dGy=-2*nGy:2*nGy
+##     
+##        dGxp=dGx+1+2*nGx;
+##        dGyp=dGy+1+2*nGy;
+##        
+##    for k=1:3
+##      if(dGy==0 && dGy==0) 
+##       Kapa(dGxp,dGyp,k)=1;
+##       else 
+##        Kapa(dGxp,dGyp,k)=0;   
+##       end
+##     end
+##     
+##         for k=4:4
+##      if(dGy==0 && dGy==0) 
+##       Kapa(dGxp,dGyp,k)=.05;
+##       else 
+##        Kapa(dGxp,dGyp,k)=0;   
+##       end
+##     end
+##   end
+##end
+
+%Kapa
 
 end
