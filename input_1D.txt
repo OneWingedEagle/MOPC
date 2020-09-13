@@ -7,31 +7,31 @@
 //GEOMETRY
 1
 //Rx Ry
-2.5  .25
+.5  .25
 //fi  anticlockiwise angle of elipse axis with x-axis.  angle is given in degrees.
 0
 //theta  angle of incident light in degrees. theta =0 means the light direction is perpendicular to the slab
 0
 //CRYSTAL CONSTANT
 // ax        ay
-5  2
+1 1
 //EPS1 EPS3
-1.0	1.0
+1	1
 //epsilon of the back ground. The first 3 are the elpsion sin the x , y and z direction and the forth one is the //complex part.
 //EPS_BACKGROUND
-2.72 	2.72   2.72	0.05
+2.72 	2.72   2.72	0.0
 //epsilon of the bars. The first 3 are the elpsion sin the x , y and z direction and the forth one is the complex //part.
 //EPS_BAR
-1. 	1.	1. 	0.0
+1. 	1.	1. 	0.05
 //Na
 // number of mile ha
-5
+8
 //Transmittivity  FaradayRotation
 1	1
 // WN1	WN2 DIVISION
-.3 .6	30
+.3 .9	216
 // NGX NGY
-0 30
+0 80
 //PlotFouriesSeries   Plot3DVectors
 0 0
 

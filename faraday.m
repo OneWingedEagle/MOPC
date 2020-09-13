@@ -97,10 +97,8 @@ plotWave=numbs(2);
 
 %=================
 
-a=ax;
-
-d1=0*a;
-d2=ax/2-Rx+0*a;
+d1=0*ay;
+d2=ay/2-Ry+0*ay;
 
 t1=cputime;
 
@@ -113,7 +111,7 @@ for p=1:1*cf*ndiv+1
     p
     
     Fn(p)=wn1+dwn*(p-1);
-    k1=pi*Fn(p)/ax;
+    k1=pi*Fn(p)/ay;
     
     
     [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);

@@ -21,11 +21,9 @@ invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))];
 
 endif
 
-ff=Na*pi*R*R/(a1*L);
-d11=d1/L;
+ w0=pi/L;
 
- w0=2*pi/a2;
-
+  for n=1:Na
   
     for dGy=-2*nGy:2*nGy
        
@@ -34,29 +32,30 @@ d11=d1/L;
         dGyp=dGy+1+2*nGy;
         
         if(dGy==0)
-         tt=2*R/a2;
+         tt=R/L;
             for k=1:nk
                 if(k~=4)
-                    Kapa(1,dGyp,k)=tt*(invepsa(k)-invepsb(k));
+                    Kapa(1,dGyp,k)= Kapa(1,dGyp,k)+exp(-1i*w0*n*a2)*tt*(invepsa(k)-invepsb(k));
                  else
-                     Kapa(1,dGyp,k)=tt*(invepsa(k)-invepsb(k));
+                     Kapa(1,dGyp,k)=Kapa(1,dGyp,k)+exp(-1i*w0*n*a2)*tt*tt*(invepsa(k)-invepsb(k));
                 endif
             end         
         else
             
-          tt=1./a2*sin(dGy*pi*R/a2)/(dGy*pi/a2);
+          tt=1./(2*L)*sin(dGy*pi*R/(2*L))/(dGy*pi/(2*L));
             
             for k=1:nk
                 if(k~=4)
-                    Kapa(1,dGyp,k)=tt*(invepsa(k)-invepsb(k));
+                    Kapa(1,dGyp,k)=Kapa(1,dGyp,k)+exp(-1i*w0*n*a2)*tt*tt*(invepsa(k)-invepsb(k));
                  else
-                    Kapa(1,dGyp,k)=tt*(invepsa(k)-invepsb(k));
+                    Kapa(1,dGyp,k)=Kapa(1,dGyp,k)+exp(-1i*w0*n*a2)*tt*tt*(invepsa(k)-invepsb(k));
                endif
             end
             
         endif
                        
         end
-
+      end
+          
 end
 

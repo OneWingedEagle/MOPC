@@ -21,52 +21,56 @@ endif
 
 global Kapa;
 
-
-ngrid=30;
+ngridx=30;
+if(nGx==0) 
+ngridx=2;
+end
+ngridy=30;
 Lh=Na*a2-a2/2;
-d11=d1/L;
 
-invep=zeros(ngrid,Na*2*ngrid,nk);
+invep=zeros(ngridx,Na*2*ngridy,nk);
 rotMat=[cosd(fi) sind(fi);-sind(fi) cosd(fi)];
 
 xyr=[0  0]';
 %The following loop carries out the definition of the unit cell.
 for n=0:2*Na-1
     nx=1;
-    for countX=-a1/2:a1/ngrid:a1/2
+    for countX=-a1/2:a1/ngridx:a1/2
         ny=1;
-        for countY=-a2/2:a2/ngrid:a2/2
-          
+        for countY=-a2/2:a2/ngridy:a2/2
             %Following condition allows to define the circle with of radius r
 			xy=[countX countY]';
 			xyr=rotMat*xy;
-
 			countXr=xyr(1);
            	countYr=xyr(2);
-                
-              if(geometry==0)
-                  inside=(countXr/Rx)^2+(countYr/Ry)^2<=1;
-              else
-                inside=abs(countXr/Rx)<=1 && abs(countYr/Ry)<=1;  
-              end
-    
+				
+            if(geometry==0)
+                inside=(countXr/Rx)^2+(countYr/Ry)^2<1;
+            else
+                 inside =false;
+                  if(Rx>0 && Ry>0) 
+                     inside=abs(countXr/Rx)<=1 && abs(countYr/Ry)<=1;
+                  end
+            end
             
             if(inside)
                 
                 ip=invepsa;
-                
-            else
 
+            else
+                
                 ip=invepsb;
+ 
             end
+            
             
             
             for k=1:nk
-                inveps(nx,ny+ngrid*n,k)=ip(k);
+                inveps(nx,ny+ngridy*n,k)=ip(k);
             end
             
             xSet(nx)=countX;
-            ySet(ny+ngrid*n)=countY+a2*n-Lh;
+            ySet(ny+ngridy*n)=countY+a2*n-Lh;
             ny=ny+1;
         end
         nx=nx+1;
@@ -74,9 +78,7 @@ for n=0:2*Na-1
 end
 
 for n=1:length(ySet)/2
-  if(k==4)
     inveps(:,n,nk)=-inveps(:,n,nk);
-  end
 end
 
 
@@ -100,6 +102,7 @@ for dGx=-2*nGx:2*nGx
                 x=xSet(nx);
                 y=ySet(ny);
                 tt=dGx*bx*x+dGy*by*y;
+                
                 for k=1:nk
                     Kapa(dGxp,dGyp,k)=Kapa(dGxp,dGyp,k)+inveps(nx,ny,k)*exp(-1i*(tt));
                 end
@@ -110,6 +113,7 @@ for dGx=-2*nGx:2*nGx
     end
 end
 
-Kapa=Kapa/MtNt;
+Kapa=  Kapa/MtNt;
+
 
 end
