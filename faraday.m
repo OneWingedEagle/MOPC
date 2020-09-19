@@ -2,8 +2,12 @@ function faraday
 
 clear all
 
-rotationGraphColor='-ob';
-transmitGraphColor='-or';
+colors = {"-or", "-ob", "-oc", "-ok","-*r", "-*b", "-*c", "-*k","-xr", "-xb", "-xc", "-xk"};
+%C = {'k','b','r','g','y'}; % Cell array of colros.
+
+colT=colors(1);
+colR=colors(2);
+
 
 [filename1,filepath1]=uigetfile('*.txt', 'Selectinput file')
  cd(filepath1)
@@ -13,7 +17,11 @@ transmitGraphColor='-or';
 line=getNewDataLine(fid);
 numbs = str2num(line);
 geometry=numbs(1);
-
+rec=0;
+if(geometry==1 && length(numbs)>1)
+rec=numbs(2);
+end
+rec
 line=getNewDataLine(fid);
 numbs = str2num(line);
 Rx=numbs(1);
@@ -97,6 +105,13 @@ plotWave=numbs(2);
 
 %=================
 
+
+for ir=1:1
+
+%  nGy=nGy+10*(ir-1)
+  colT=colors{ir}
+  colR=colors{ir+1}
+
 d1=0*ay;
 d2=ay/2-Ry+0*ay;
 
@@ -111,10 +126,11 @@ for p=1:1*cf*ndiv+1
     p
     
     Fn(p)=wn1+dwn*(p-1);
-    k1=pi*Fn(p)/ay;
+    k1=2*pi*Fn(p)/ay;
     
     
-    [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,rotationGraphColor,theta,fi);
+    [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1,d2,Na,nGx,
+    nGy,k1,p,plotFT,plotWave,colR,theta,fi,rec);
            
       if(real(Ts)>1) 
         Ts=1;
@@ -163,7 +179,7 @@ fprintf(fid,'[wn *  Rotation * Transmitance ]\n');
   
 if(rotation &&length(Tr)>1)
                 figure(1)
-             plot(Fn,Tr,rotationGraphColor);
+             plot(Fn,Tr,colR);
  
              axis([wn1,wn2,-90,90]);
              hold on
@@ -171,7 +187,7 @@ end
             
 if(transmit &&length(Tt)>1)
               figure(2)
-               plot(Fn,Tt,transmitGraphColor);
+               plot(Fn,Tt,colT);
                  axis([wn1,wn2,min(Tt),max(Tt)]);
                 %axis([wn1,wn2,0,1]);
                  hold on
@@ -180,4 +196,4 @@ end
 
 end
 
-
+end

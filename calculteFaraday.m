@@ -1,4 +1,5 @@
-function [Ts Rs Fr ]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi)
+function [Ts Rs Fr ]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,Rx,Ry,d1,
+  d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi,rec)
 
 
 nk=size(epsb,2);
@@ -59,20 +60,31 @@ if(p==1)
         FillKapaCylinderSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
        endif
     else
- %      if(geometry==1 && nGx==0)        
-%       FillKapa1D(nGx,nGy,epsa,epsb,L,Ry,Na,a1,a2,d1);
- %       FillKapa1DAntiSym(nGx,nGy,epsa,epsb,L,Ry,Na,a1,a2,d1);
-%       else
-        FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
- %       endif
+    if(geometry==1 && rec )
+    FillKapaRectangleAntiSym(nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
+    else
+       FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
+    endif
     end
 
+
+for dGx=-2*nGx:2*nGx
+   
+   for dGy=-2*nGy:2*nGy
+ 
+       dGxp=dGx+1+2*nGx;
+        dGyp=dGy+1+2*nGy;
+%        kapa1=Kapa(dGxp,dGyp,1)
+        
+   end
+end
+    
     
     if(plotFT)
         
         
         ndx=50;
- 	ndy=50*Na;
+ 	      ndy=50*Na;
         
         x=linspace(-a1/2,a1/2,ndx);
         y=linspace(0,L,ndy);
@@ -442,6 +454,7 @@ kp=numG*nk;
 kpp=(numG+2*nGx+1)*nk;
 for Gx=-nGx:nGx
     k=nGx+Gx;
+   
     for j=1:nk
         Tn(k+1,j)=x(kp+k*nk+j);
         Tn2(k+1)= Tn2(k+1)+abs(Tn(k+1,j))^2;
@@ -449,6 +462,8 @@ for Gx=-nGx:nGx
         Rn(k+1,j)=x(kpp+k*nk+j);
         Rn2(k+1)= Rn2(k+1)+abs(Rn(k+1,j))^2;
     end
+    
+
 end
 
 
