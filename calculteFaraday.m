@@ -487,8 +487,7 @@ for Gx=-nGx:nGx
     else
         ktny=1i*sqrt(kxn2-k3^2);
     end
-    
-    
+        
     Ts=Ts+ktny/k3*sqrt(eps3/eps1)*Tn2(k)/cosd(theta);
         %Ts=Ts+ktny/k3*sqrt(eps3/eps1)*abs(Tn(k,3))^2/cos(thetad);
 

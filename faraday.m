@@ -105,10 +105,10 @@ plotWave=numbs(2);
 
 %=================
 
+ nGy0=nGy;
+for ir=1:5
 
-for ir=1:1
-
-%  nGy=nGy+10*(ir-1)
+  nGy=nGy0+10*(ir-1)
   colT=colors{ir}
   colR=colors{ir+1}
 
