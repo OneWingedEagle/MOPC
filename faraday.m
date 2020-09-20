@@ -5,8 +5,6 @@ clear all
 colors = {"-or", "-ob", "-oc", "-ok","-*r", "-*b", "-*c", "-*k","-xr", "-xb", "-xc", "-xk"};
 %C = {'k','b','r','g','y'}; % Cell array of colros.
 
-colT=colors(1);
-colR=colors(2);
 
 
 [filename1,filepath1]=uigetfile('*.txt', 'Selectinput file')
@@ -74,7 +72,7 @@ else
 epsb=[epsbx];
 
 epsa=[epsax];
-endif
+end
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
@@ -84,7 +82,15 @@ line=getNewDataLine(fid);
 numbs = str2num(line);
 transmit=numbs(1);
 rotation=numbs(2);
-numbs
+
+if(transmit>0)
+colT=colors(transmit);
+end
+
+if(rotation>0)
+colR=colors(rotation);
+end
+
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
@@ -96,21 +102,23 @@ ndiv=numbs(3);
 line=getNewDataLine(fid);
 numbs = str2num(line);
 nGx=numbs(1)
-nGy=numbs(2)
+nGy=numbs(2);
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
 plotFT=numbs(1);
 plotWave=numbs(2);
 
+
+
 %=================
 
  nGy0=nGy;
-for ir=1:5
+for ir=1:1
 
   nGy=nGy0+10*(ir-1)
-  colT=colors{ir}
-  colR=colors{ir+1}
+%  colT=colors{ir+1}
+%  colR=colors{ir+1}
 
 d1=0*ay;
 d2=ay/2-Ry+0*ay;
@@ -129,8 +137,8 @@ for p=1:1*cf*ndiv+1
     k1=2*pi*Fn(p)/ay;
     
     
-    [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1,d2,Na,nGx,
-    nGy,k1,p,plotFT,plotWave,colR,theta,fi,rec);
+    [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1, ...
+        d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colR,theta,fi,rec);
            
       if(real(Ts)>1) 
         Ts=1;

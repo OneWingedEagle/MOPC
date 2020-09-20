@@ -1,10 +1,9 @@
-function [Ts Rs Fr ]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,Rx,Ry,d1,
-  d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi,rec)
+function [Ts Rs Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,Rx,Ry,d1 ...
+    ,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi,rec)
 
 
 nk=size(epsb,2);
 
-twoMat=1;
 
 d=d1+d2;
 
@@ -33,7 +32,7 @@ E0=[0 0 1]';
 
 if(nk==1) 
 E0=[1];
-endif
+end
 
 
 kx=k1*sind(theta);
@@ -58,13 +57,13 @@ if(p==1)
          FillKapaCylinderAntiSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
        else
         FillKapaCylinderSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
-       endif
+        end
     else
     if(geometry==1 && rec )
     FillKapaRectangleAntiSym(nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
     else
        FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
-    endif
+    end
     end
 
 
@@ -546,7 +545,8 @@ end
 
 E1=ff/L+si;
 
-E2=real(E1);
+E2=abs(E1);
+%E2=real(E1);
 
 E2(:,:,1);
 
@@ -651,21 +651,48 @@ end;
 
 angs=zeros(nan,1);
 angs(1)=atan(tans(1));
+##
+##for k=2:nan
+##    
+##    tnp=tans(k-1);
+##    tn=tans(k);
+##    angs(k)=atan(tn)*180/pi;
+##    %  angs(k)=E2(1,k,3);
+##    % angs(k)=angs(k-1)+atan((tn-tnp)/(1+tn*tnp))*180/pi;
+##    
+##    
+##end
 
-for k=2:nan
+angAcc=0;
+ang90=0;
+for k=2:nL
     
-    tnp=tans(k-1);
-    tn=tans(k);
-    angs(k)=atan(tn)*180/pi;
-    %  angs(k)=E2(1,k,3);
-    % angs(k)=angs(k-1)+atan((tn-tnp)/(1+tn*tnp))*180/pi;
+    Vx=E2(1,k,1);
+    Vz=E2(1,k,3);
     
+    magn=sqrt(Vx^2+Vz^2);
     
+   if(k>1)
+    Vxp=E2(1,k-1,1);
+    Vzp=E2(1,k-1,3);
+    magnp= sqrt(Vxp^2+Vzp^2);
+    cross=Vx*Vzp-Vz*Vxp;
+    dang=asin(cross/(magn*magnp))*180/pi;
+    
+    ang90=ang90+dang;
+%    if(ang90>90) ang90=-ang90-90;
+%    end
+       angAcc=ang90;
+       
+      angs(k)=angAcc;
+
+   end 
 end
 
+Fr=angAcc;
 
 
-Fr=(angs(nan)-ang0);
+%Fr=(angs(nan)-ang0);
 
 endif
 %Eout=sqrt(E2(1,nL,1)^2+E2(1,nL,2)^2+E2(1,nL,3)^2);
@@ -683,4 +710,5 @@ if(plotWave)
 end
 
 end
+
 
