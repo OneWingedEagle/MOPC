@@ -5,7 +5,7 @@ disp("rectangle anti-sym");
 nk=4;
 if(length(epsa)==1)
 nk=1;
-endif
+end
 
 invepsa1=inv(epsa);
 invepsb1=inv(epsb);
@@ -19,7 +19,7 @@ else
 invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))];
 invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))];
 
-endif
+end
 
 cell_size=a1*a2*Na*2;
 rect_size=2*Rx*2*Ry;
@@ -47,7 +47,7 @@ for dGx=-2*nGx:2*nGx
             four_coef=filly*sin(dGx*w0x*Rx)/(dGx*w0x);
        else
             four_coef=sin(dGx*w0x*Rx)*sin(dGy*w0y*Ry)/(dGx*dGy*w0x*w0y);
-        endif
+        end
         
  %         four_coef=four_coef*exp(-1i*w0y*a2);
         for n=-(Na):Na-1
@@ -61,7 +61,7 @@ for dGx=-2*nGx:2*nGx
            else
                Kapa(dGxp,dGyp,k)=four_coef*(invepsa(k)-invepsb(k));
 
-           endif
+           end
            
                
                

@@ -19,21 +19,21 @@
 1.	1.
 //epsilon of the back ground. The first 3 are the elpsion sin the x , y and z direction and the forth one is the //complex part.
 //EPS_BACKGROUND
-4.884 	4.884  4.884	0.0
-//1. 	1.	1. 	0.0
+//2.72 	2.72	2.72 	0.03
+1. 	1.	1. 	0.0
 //epsilon of the bars. The first 3 are the elpsion sin the x , y and z direction and the forth one is the complex //part.
 //EPS_BAR
-1. 	1.	1. 	0.05
+2.72 	2.72	2.72 	0.03
 //Na
 // number of mile ha
-14
+4
 //Transmittivity  FaradayRotation
 1 1
 // WN1	WN2 DIVISION
-.3  .5  32
+.375  .5  1
 // NGX NGY
-0 20
+0 40
 //PlotFouriesSeries   Plot3DVectors
-0 0
+0 1
 
 

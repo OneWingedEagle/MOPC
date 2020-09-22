@@ -2,7 +2,7 @@ function faraday
 
 clear all
 
-colors = {"-or", "-ob", "-oc", "-ok","-*r", "-*b", "-*c", "-*k","-xr", "-xb", "-xc", "-xk"};
+colors = {'-or', '-ob', '-oc', '-ok','-*r', '-*b', '-*c', '-*k','-xr', '-xb', '-xc', '-xk'};
 %C = {'k','b','r','g','y'}; % Cell array of colros.
 
 
@@ -102,7 +102,7 @@ ndiv=numbs(3);
 line=getNewDataLine(fid);
 numbs = str2num(line);
 nGx=numbs(1)
-nGy=numbs(2);
+nGy=numbs(2)
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
@@ -115,10 +115,12 @@ plotWave=numbs(2);
 
  nGy0=nGy;
 for ir=1:1
+ % Ry=ir*.5*.2
+ % Ry=Rx;
 
-  nGy=nGy0+10*(ir-1)
-%  colT=colors{ir+1}
-%  colR=colors{ir+1}
+ % nGy=nGy0+10*(ir-1)
+  colT=colors{ir+1}
+  colR=colors{ir+1}
 
 d1=0*ay;
 d2=ay/2-Ry+0*ay;
@@ -129,16 +131,19 @@ dwn=(wn2-wn1)/ndiv;
 
 cf=(plotWave==0);
 
+Fr_hom=zeros(1*cf*ndiv+1,1);
+
 for p=1:1*cf*ndiv+1
     
     p
     
+
+    
     Fn(p)=wn1+dwn*(p-1);
     k1=2*pi*Fn(p)/ay;
+     Fr_hom(p)=-180*gamab/sqrt(epsbx)*Na*Fn(p);
     
-    
-    [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1, ...
-        d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colR,theta,fi,rec);
+    [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colR,theta,fi,rec);
            
       if(real(Ts)>1) 
         Ts=1;
@@ -151,6 +156,7 @@ for p=1:1*cf*ndiv+1
 
 end
 
+
 t2=cputime;
 
 comptation_time=t2-t1;
@@ -161,6 +167,8 @@ comptation_time;
 	
 result=zeros(1*cf*ndiv+1,3);
 
+
+fidx = fopen('analyt.txt','wt');  % Note the 'wt' for writing in text mode
 fid = fopen('results.txt','wt');  % Note the 'wt' for writing in text mode
 
 fprintf(fid,'[nGx *  nGy]\n');  
@@ -176,21 +184,28 @@ fprintf(fid,'[wn *  Rotation * Transmitance ]\n');
   result(p,3)= Tt(p);
 
   fprintf(fid,'%f\t%f\t%f\n',result(p,1),result(p,2),result(p,3));
+  fprintf(fidx,'%f\t%f\n',result(p,1),Fr_hom(p));
+
 
   end
     fclose(fid);
+     fclose(fidx);
      
   disp('Results:');
   disp('[wn *  Rotation * Transmitance ]');	
   disp(result);
-
   
 if(rotation &&length(Tr)>1)
                 figure(1)
              plot(Fn,Tr,colR);
+             
  
              axis([wn1,wn2,-90,90]);
              hold on
+             
+            plot(Fn,Fr_hom,'+k');
+             hold on
+
 end
             
 if(transmit &&length(Tt)>1)
@@ -203,5 +218,6 @@ if(transmit &&length(Tt)>1)
 end
 
 end
+
 
 end

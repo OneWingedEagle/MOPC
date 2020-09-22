@@ -1,5 +1,4 @@
-function FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,...
-    d1,fi)
+function FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi)
 
 nk=4;
 if(length(epsa)==1)

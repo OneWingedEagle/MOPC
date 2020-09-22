@@ -67,17 +67,6 @@ if(p==1)
     end
 
 
-for dGx=-2*nGx:2*nGx
-   
-   for dGy=-2*nGy:2*nGy
- 
-       dGxp=dGx+1+2*nGx;
-        dGyp=dGy+1+2*nGy;
-%        kapa1=Kapa(dGxp,dGyp,1)
-        
-   end
-end
-    
     
     if(plotFT)
         
@@ -427,8 +416,8 @@ disp('solving matrix...');
 
   NN=NN+MM;   
 
-
-  x=linsolve(NN,bN);
+opts.POSDEF = true;
+  x=linsolve(NN,bN,opts);
 
 
 Anm=zeros(2*nGx+1,nGy,nk);
@@ -546,16 +535,10 @@ end
 E1=ff/L+si;
 
 E2=abs(E1);
-%E2=real(E1);
-
 E2(:,:,1);
 
 %writeMeshAndField(Nx,nL,1,E2,2,Na);
 
-
-
-%surf(x2,y2,E2(:,:,2));
-%plotWave2=false;
 
 if(plotWave)
     figure(5)
@@ -644,55 +627,28 @@ j=0;
 for k=1:nL
     if(tans1(k)~=1e10)
         j=j+1;
-        tans(j)=tans1(k);
+        tans(j)=-tans1(k);
         y(j)=yy(k);
     end
 end;
 
 angs=zeros(nan,1);
 angs(1)=atan(tans(1));
-##
-##for k=2:nan
-##    
-##    tnp=tans(k-1);
-##    tn=tans(k);
-##    angs(k)=atan(tn)*180/pi;
-##    %  angs(k)=E2(1,k,3);
-##    % angs(k)=angs(k-1)+atan((tn-tnp)/(1+tn*tnp))*180/pi;
-##    
-##    
-##end
 
-angAcc=0;
-ang90=0;
-for k=2:nL
+for k=2:nan
     
-    Vx=E2(1,k,1);
-    Vz=E2(1,k,3);
+    tnp=tans(k-1);
+    tn=tans(k);
+    angs(k)=atan(tn)*180/pi;
+    %  angs(k)=E2(1,k,3);
+    % angs(k)=angs(k-1)+atan((tn-tnp)/(1+tn*tnp))*180/pi;
     
-    magn=sqrt(Vx^2+Vz^2);
     
-   if(k>1)
-    Vxp=E2(1,k-1,1);
-    Vzp=E2(1,k-1,3);
-    magnp= sqrt(Vxp^2+Vzp^2);
-    cross=Vx*Vzp-Vz*Vxp;
-    dang=asin(cross/(magn*magnp))*180/pi;
-    
-    ang90=ang90+dang;
-%    if(ang90>90) ang90=-ang90-90;
-%    end
-       angAcc=ang90;
-       
-      angs(k)=angAcc;
-
-   end 
 end
 
-Fr=angAcc;
 
 
-%Fr=(angs(nan)-ang0);
+Fr=(angs(nan)-ang0);
 
 endif
 %Eout=sqrt(E2(1,nL,1)^2+E2(1,nL,2)^2+E2(1,nL,3)^2);
@@ -710,5 +666,4 @@ if(plotWave)
 end
 
 end
-
 
