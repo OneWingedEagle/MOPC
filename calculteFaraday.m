@@ -534,7 +534,7 @@ end
 
 E1=ff/L+si;
 
-E2=abs(E1);
+E2=real(E1);
 E2(:,:,1);
 
 %writeMeshAndField(Nx,nL,1,E2,2,Na);
@@ -627,7 +627,9 @@ j=0;
 for k=1:nL
     if(tans1(k)~=1e10)
         j=j+1;
-        tans(j)=-tans1(k);
+        
+        tans(j)=tans1(k);
+        
         y(j)=yy(k);
     end
 end;
@@ -639,7 +641,14 @@ for k=2:nan
     
     tnp=tans(k-1);
     tn=tans(k);
-    angs(k)=atan(tn)*180/pi;
+    angs(k)=-atan(tn)*180/pi;
+
+    if(angs(k)>0)
+  
+%    angs(k)=-180+angs(k);
+    
+    end
+
     %  angs(k)=E2(1,k,3);
     % angs(k)=angs(k-1)+atan((tn-tnp)/(1+tn*tnp))*180/pi;
     

@@ -23,7 +23,7 @@
 //epsilon of the bars. The first 3 are the elpsion sin the x , y and z direction and the forth one is the complex //part.
 //EPS_BAR
 //1. 	1.	1. 	0.0
-6.25   6.25     6.25 .03
+6.25   6.25     6.25 .3
 //Na
 // number of mile ha
 14
