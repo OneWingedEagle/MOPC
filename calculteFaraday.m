@@ -54,7 +54,7 @@ if(p==1)
         %lattivce not implemented properly.
     elseif (geometry==0 && Rx==Ry)
         if(nk==3)
-         FillKapaCylinderAntiSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
+         FillKapaCylinderAntiSymDef(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1); 
        else
         FillKapaCylinderSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
         end
@@ -72,11 +72,11 @@ if(p==1)
     if(plotFT)
         
         
-        ndx=50;
- 	      ndy=50*Na;
+        ndx=30;
+ 	      ndy=40*Na;
         
         x=linspace(-a1/2,a1/2,ndx);
-        y=linspace(0,L,ndy);
+        y=linspace(-L,L,ndy);
         
         [xx yy]=ndgrid(x,y);
         
@@ -93,7 +93,7 @@ if(p==1)
                         Gn=bx*n;
                         Gm=by*m;
 
-                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,1);
+                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,4);
                         
                         tt=tt+TT*exp(1i*(Gn*x1+Gm*y1));
                     end
@@ -104,7 +104,7 @@ if(p==1)
         end
         
         
-        X=abs(Kapa(:,:,1));
+    %    X=abs(Kapa(:,:,1));
 
         
         figure(4);

@@ -117,11 +117,56 @@ end
 KapaUnit=  KapaUnit/MtNt;
 
 
+global ndef
+
+ndef
+
+
+KapaDefect=zeros(1,4*nGy+1,4)+1i*zeros(1,4*nGy+1,4);
+ 
+
+if(ndef>0)
+ 
+     for dGy=-2*nGy:2*nGy
+        
+        dGyp=dGy+1+2*nGy;
+
+        tt=dGy*by*a2/2;
+          
+          for k=1:nk
+                if(dGy==0)
+                  KapaDefect(1,dGyp,k)=invepsb(k)*a2/(2*L);
+                else
+                  KapaDefect(1,dGyp,k)=invepsb(k)*a2/(2*L)*sin(tt)/(tt);
+             end
+         
+         end
+    
+        
+    end
+ 
+end
+
+
+by=pi/L;
 for n=-Na:Na-1 
+
+
  for dGy=-2*nGy:2*nGy
        
-        dGyp=dGy+1+2*nGy;
+      dGyp=dGy+1+2*nGy;
         twindle=exp(-1i*(n+.5)*by*dGy*a2);
+        
+   if(n>=-ndef && n<ndef)
+
+    for k=1:nk
+       if(k!=4 || n>=0)
+       Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
+        else
+       Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)-KapaDefect(1,dGyp,k)*twindle;
+        end
+     end
+   else
      for k=1:nk
        if(k!=4 || n>=0)
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
@@ -129,39 +174,13 @@ for n=-Na:Na-1
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)-KapaUnit(:,dGyp,k)*twindle;
         end
      end
+   
+   end
         
         
     end
+  end
+
+  
 end
 
-
-##Kapa(:,:,1);
-##Kapa(:,:,4);
-##
-##nL=100;
-##ff=zeros(nL,1);
-##yy=zeros(nL,1);
-##ww=2*L;
-##dy=ww/nL;
-##for ny=1:nL
-##  yy(ny)=-ww/2+(ny-1)*dy;
-##end
-##ff=zeros(nL,1);
-##
-##
-##      for ny=1:nL
-##         y= yy(ny);
-##         for dGy=-2*nGy:2*nGy
-##             dGyp=dGy+1+2*nGy;
-##             tt=dGy*by*y;
-##             
-##             ff(ny)=  ff(ny)+Kapa(1,dGyp,4)*exp(1i*(tt));
-##              
-##         end
-##          
-##      end
-##  
-##           figure(6)
-##        plot(yy,real(ff),'-ok');
-
-end

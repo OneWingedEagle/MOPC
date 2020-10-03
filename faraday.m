@@ -77,7 +77,10 @@ end
 line=getNewDataLine(fid);
 numbs = str2num(line);
 Na=numbs(1);
-
+global ndef=0;
+if(length(numbs)>1)
+ndef=numbs(2);
+end
 line=getNewDataLine(fid);
 numbs = str2num(line);
 transmit=numbs(1);
@@ -120,7 +123,7 @@ for ir=1:1
 
  % nGy=nGy0+10*(ir-1)
   colT=colors{ir}
-  colR=colors{ir}
+  colR=colors{ir+1}
 
 d1=0*ay;
 d2=ay/2-Ry+0*ay;
