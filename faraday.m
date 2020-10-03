@@ -119,8 +119,8 @@ for ir=1:1
  % Ry=Rx;
 
  % nGy=nGy0+10*(ir-1)
-  colT=colors{ir+1}
-  colR=colors{ir+1}
+  colT=colors{ir}
+  colR=colors{ir}
 
 d1=0*ay;
 d2=ay/2-Ry+0*ay;

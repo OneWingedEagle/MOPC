@@ -48,7 +48,7 @@ pph=2/pi;
 
 if(p==1)
     disp('Computing the Fourier series ..');
-    Kapa=zeros(4*nGx+1,4*nGy+1,4);
+    Kapa=zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
     if(triang)
         FillKapaTriang(nGx,nGy,epsa,epsb,L,R,Na,a1,a2);  %triangular
         %lattivce not implemented properly.
@@ -61,8 +61,49 @@ if(p==1)
     else
     if(geometry==1 && rec )
     FillKapaRectangleAntiSym(nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
-    else
+  else
+
+##  t1=cputime;
+##       FillKapaAntiSymNumOld(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
+##   t2=cputime;
+##       Kap1= zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
+##       Kapa(:,:,4)
+##disp('NumOld');
+##time=t2-t1
+##   for dGx=-2*nGx:2*nGx
+##    for dGy=-2*nGy:2*nGy
+##        dGxp=dGx+1+2*nGx;
+##        dGyp=dGy+1+2*nGy;
+##       Kap1(dGxp,dGyp,4)=Kapa(dGxp,dGyp,4);
+##      end
+##    end
+   t3=cputime;   
        FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
+     t4=cputime;
+     Kapa(:,:,4);
+disp('Num2');
+
+time=t4-t3
+##       Kap2= zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
+##
+##   for dGx=-2*nGx:2*nGx
+##    for dGy=-2*nGy:2*nGy
+##        dGxp=dGx+1+2*nGx;
+##        dGyp=dGy+1+2*nGy;
+##       Kap2(dGxp,dGyp,4)=Kapa(dGxp,dGyp,4);
+##       
+##      dif=  Kap2(dGxp,dGyp,4)-  Kap1(dGxp,dGyp,4);
+##      if(abs(dif)>1e-6)
+##        Kap1(dGxp,dGyp,4)
+##               Kap2(dGxp,dGyp,4)
+##
+##      dif
+##      end
+##      end
+##    end
+## 
+
+    
     end
     end
 

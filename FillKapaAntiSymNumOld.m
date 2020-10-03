@@ -1,4 +1,4 @@
-function FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi)
+function FillKapaAntiSymNumOld(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi)
 
 nk=4;
 if(length(epsa)==1)
@@ -14,8 +14,8 @@ invepsa=[invepsa1(1,1)];
 invepsb=[invepsb1(1,1)];
 
 else
-invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))]
-invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))]
+invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))];
+invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))];
 
 end
 
@@ -29,14 +29,15 @@ ngridx=40;
 ##ngridx=30;
 ##end
 ngridy=40;
+Lh=Na*a2-a2/2;
 
-invep=zeros(ngridx,ngridy,nk);
+invep=zeros(ngridx,Na*2*ngridy,nk);
 rotMat=[cosd(fi) sind(fi);-sind(fi) cosd(fi)];
 
 
 xyr=[0  0]';
 %The following loop carries out the definition of the unit cell.
-
+for n=0:2*Na-1
     nx=1;
     for countX=-a1/2:a1/ngridx:a1/2
         ny=1;
@@ -69,26 +70,28 @@ xyr=[0  0]';
             
             
             for k=1:nk
-                inveps(nx,ny,k)=ip(k);
+                inveps(nx,ny+ngridy*n,k)=ip(k);
             end
             
             xSet(nx)=countX;
-            ySet(ny)=countY;
+            ySet(ny+ngridy*n)=countY+a2*n-Lh;
             ny=ny+1;
         end
         nx=nx+1;
     end
+end
 
+for n=1:length(ySet)/2
+    inveps(:,n,nk)=-inveps(:,n,nk);
+end
 
-
-MtNt=(length(xSet)-1)*(length(ySet)-1)*2*Na;
+MtNt=(length(xSet)-1)*(length(ySet)-1);
 %The next loop computes the Fourier expansion coefficients
 bx=2*pi/a1;
 
 by=pi/L;
 
-KapaUnit=zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
- 
+
 for dGx=-2*nGx:2*nGx
     
     for dGy=-2*nGy:2*nGy
@@ -104,7 +107,7 @@ for dGx=-2*nGx:2*nGx
                 tt=dGx*bx*x+dGy*by*y;
                 
                 for k=1:nk
-                    KapaUnit(dGxp,dGyp,k)=KapaUnit(dGxp,dGyp,k)+inveps(nx,ny,k)*exp(-1i*(tt));
+                    Kapa(dGxp,dGyp,k)=Kapa(dGxp,dGyp,k)+inveps(nx,ny,k)*exp(-1i*(tt));
                 end
             end
         end
@@ -113,55 +116,6 @@ for dGx=-2*nGx:2*nGx
     end
 end
 
-KapaUnit=  KapaUnit/MtNt;
-
-
-for n=-Na:Na-1 
- for dGy=-2*nGy:2*nGy
-       
-        dGyp=dGy+1+2*nGy;
-        twindle=exp(-1i*(n+.5)*by*dGy*a2);
-     for k=1:nk
-       if(k!=4 || n>=0)
-         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
-        else
-         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
-        end
-     end
-        
-        
-    end
-end
-
-
-
-##Kapa(:,:,1);
-##Kapa(:,:,4);
-##
-##nL=100;
-##ff=zeros(nL,1);
-##yy=zeros(nL,1);
-##ww=2*a2;
-##dy=ww/nL;
-##for ny=1:nL
-##  yy(ny)=-ww/2+(ny-1)*dy;
-##end
-##ff=zeros(nL,1);
-##
-##
-##      for ny=1:nL
-##         y= yy(ny);
-##         for dGy=-2*nGy:2*nGy
-##             dGyp=dGy+1+2*nGy;
-##             tt=dGy*by*y;
-##             
-##             ff(ny)=  ff(ny)+Kapa(1,dGyp,1)*exp(1i*(tt));
-##              
-##         end
-##          
-##      end
-##  
-##           figure(6)
-##        plot(yy,real(ff),'-ok');
+Kapa=  Kapa/MtNt;
 
 end

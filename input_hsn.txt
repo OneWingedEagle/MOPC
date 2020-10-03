@@ -5,8 +5,9 @@
 //The first input parametrer is GEOMETRY which describes the bar cross-section being elliptical or rectangular
 //GEOMETRY =0 indicates eliptical, GEOMETRY =1 is for rectangular
 //GEOMETRY
-0
-.504	.504
+1
+//.504	.5042
+.5	.25
 //Rx Ry
 //fi  anticlockiwise angle of elipse axis with x-axis.  angle is given in degrees.
 0
@@ -14,26 +15,24 @@
 0
 //CRYSTAL CONSTANT
 // ax        ay
-1.17	1.17
+1.	1.
 //EPS1 EPS3
 1.0	1.0
 //epsilon of the back ground. The first 3 are the elpsion sin the x , y and z direction and the forth one is the //complex part.
 //EPS_BACKGROUND
-//2.72 	2.72	2.72 	0.03
-2.25 	2.25	2.25 	0.05
+//2.72 	2.72	2.72 	0.009
+2.75 	2.75	2.75 	0.
 //epsilon of the bars. The first 3 are the elpsion sin the x , y and z direction and the forth one is the complex //part.
 //EPS_BAR
-1. 	1.	1. 	0.0
+1. 	1.	1. 	0.
 //Na
 // number of mile ha
-8
+1
 //Transmittivity  FaradayRotation
 1 1
 // WN1	WN2 DIVISION
-.45 .46  1
-// NGX NGY
-0 40
+1.1 1.2 1
+0 5
 //PlotFouriesSeries   Plot3DVectors
-0	1
-
+1	0
 
