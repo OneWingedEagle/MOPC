@@ -1,5 +1,6 @@
 function FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi)
 
+disp('Numerical anti-sym');
 nk=4;
 if(length(epsa)==1)
 nk=1;
@@ -14,8 +15,8 @@ invepsa=[invepsa1(1,1)];
 invepsb=[invepsb1(1,1)];
 
 else
-invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))]
-invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))]
+invepsa=[invepsa1(1,1)  invepsa1(2,2) invepsa1(3,3) imag(invepsa1(1,3))];
+invepsb=[invepsb1(1,1) invepsb1(2,2) invepsb1(3,3)  imag(invepsb1(1,3))];
 
 end
 
@@ -25,9 +26,9 @@ global Kapa;
 
 
 ngridx=40;
-##if(nGx==0) 
-##ngridx=30;
-##end
+if(nGx==0) 
+ngridx=2;
+end
 ngridy=40;
 
 invep=zeros(ngridx,ngridy,nk);
@@ -125,7 +126,7 @@ for n=-Na:Na-1
        if(k!=4 || n>=0)
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
         else
-         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
+         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)-KapaUnit(:,dGyp,k)*twindle;
         end
      end
         
@@ -134,14 +135,13 @@ for n=-Na:Na-1
 end
 
 
-
 ##Kapa(:,:,1);
 ##Kapa(:,:,4);
 ##
 ##nL=100;
 ##ff=zeros(nL,1);
 ##yy=zeros(nL,1);
-##ww=2*a2;
+##ww=2*L;
 ##dy=ww/nL;
 ##for ny=1:nL
 ##  yy(ny)=-ww/2+(ny-1)*dy;
@@ -155,7 +155,7 @@ end
 ##             dGyp=dGy+1+2*nGy;
 ##             tt=dGy*by*y;
 ##             
-##             ff(ny)=  ff(ny)+Kapa(1,dGyp,1)*exp(1i*(tt));
+##             ff(ny)=  ff(ny)+Kapa(1,dGyp,4)*exp(1i*(tt));
 ##              
 ##         end
 ##          
