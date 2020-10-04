@@ -28,7 +28,12 @@ numG=(Lx1)*nGy;
 
 dd=Lx1;
 
+global inc_mode;
+if(inc_mode==0)
 E0=[0 0 1]';
+else
+E0=[1 0 0]';
+end
 
 if(nk==1) 
 E0=[1];
@@ -93,7 +98,7 @@ if(p==1)
                         Gn=bx*n;
                         Gm=by*m;
 
-                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,4);
+                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,1);
                         
                         tt=tt+TT*exp(1i*(Gn*x1+Gm*y1));
                     end
@@ -601,7 +606,11 @@ end
 
 if(nk==3)
 
+if(inc_mode==0)
 tn0=E2(1,1,1)/E2(1,1,3);
+else
+tn0=-E2(1,1,3)/E2(1,1,1);
+end
 
 ang0=atan(tn0);
 nan=0;
@@ -615,7 +624,11 @@ for k=1:nL
     magn=sqrt(Vx^2+Vz^2);
     
     if( magn>-.1)
-        tans1(k)=Vx/Vz;
+    if(inc_mode==0)
+    tans1(k)=Vx/Vz;
+else
+    tans1(k)=-Vz/Vx;
+end
         nan=nan+1;
     else
         tans1(k)=1e10;

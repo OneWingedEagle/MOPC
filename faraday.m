@@ -32,6 +32,11 @@ fi=numbs(1);
 line=getNewDataLine(fid);
 numbs = str2num(line);
 theta=numbs(1);
+global inc_mode;
+inc_mode=0;
+if(length(numbs)>1)
+inc_mode=numbs(2);
+end
 
 line=getNewDataLine(fid);
 numbs = str2num(line);
@@ -122,12 +127,10 @@ plotWave=numbs(2);
 
  nGy0=nGy;
 for ir=1:1
- % Ry=ir*.5*.2
- % Ry=Rx;
 
- % nGy=nGy0+10*(ir-1)
-  colT=colors{ir}
-  colR=colors{ir+1}
+inc_mode
+  colT=colors{ir+inc_mode}
+  colR=colors{ir+1+inc_mode}
 
 d1=0*ay;
 d2=ay/2-Ry+0*ay;

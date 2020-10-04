@@ -32,7 +32,7 @@ for dGx=-2*nGx:2*nGx
     for dGy=-2*nGy:2*nGy
         Gm=dGy*pi/L;
         GnmR=sqrt(Gn*Gn+Gm*Gm)*R;
-        dGxp=dGx+1+2*nGx;
+        
         dGyp=dGy+1+2*nGy;
         
         if(dGx==0&& dGy==0)
@@ -118,7 +118,7 @@ for n=-Na:Na-1
      if(isDef(np,1))
 
     for k=1:nk
-       if(k!=4 || n>=0)
+       if(k~=4 || n>=0)
        Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
         else
        Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)-KapaDefect(1,dGyp,k)*twindle;
@@ -126,7 +126,7 @@ for n=-Na:Na-1
      end
    else
      for k=1:nk
-       if(k!=4 || n>=0)
+       if(k~=4 || n>=0)
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
         else
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)-KapaUnit(:,dGyp,k)*twindle;
