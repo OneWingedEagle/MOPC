@@ -57,8 +57,8 @@ for dGx=-2*nGx:2*nGx
     end
 end
 
-global ndef
-
+global ndef;
+global defstart;
 
 by=pi/L;
 
@@ -91,18 +91,31 @@ end
  
 Kapa=zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
 
+ndef
+defstart
+
+defcount=0;
+isDef=zeros(2*Na,1);
+for n=0:Na-1 
+  np=n+Na+1;
+ if(n+1>=defstart && defcount<ndef)
+ defcount=defcount+1;
+ isDef(np,1)=1;
+ isDef(Na-n,1)=1;
+ endif
+end
 
 
 by=pi/L;
 for n=-Na:Na-1 
-
+ np=n+Na+1;
 
  for dGy=-2*nGy:2*nGy
        
       dGyp=dGy+1+2*nGy;
         twindle=exp(-1i*(n+.5)*by*dGy*a2);
         
-   if(n>=-ndef && n<ndef)
+     if(isDef(np,1))
 
     for k=1:nk
        if(k!=4 || n>=0)

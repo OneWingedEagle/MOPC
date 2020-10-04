@@ -78,8 +78,12 @@ line=getNewDataLine(fid);
 numbs = str2num(line);
 Na=numbs(1);
 global ndef=0;
+global defstart=Na/2;
 if(length(numbs)>1)
 ndef=numbs(2);
+end
+if(length(numbs)>2)
+defstart=numbs(3);
 end
 line=getNewDataLine(fid);
 numbs = str2num(line);

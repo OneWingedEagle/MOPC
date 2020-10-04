@@ -117,10 +117,8 @@ end
 KapaUnit=  KapaUnit/MtNt;
 
 
-global ndef
-
-ndef
-
+global ndef;
+global defstart;
 
 KapaDefect=zeros(1,4*nGy+1,4)+1i*zeros(1,4*nGy+1,4);
  
@@ -148,17 +146,31 @@ if(ndef>0)
 end
 
 
+ndef
+defstart
+
+defcount=0;
+isDef=zeros(2*Na,1);
+for n=0:Na-1 
+  np=n+Na+1;
+ if(n+1>=defstart && defcount<ndef)
+ defcount=defcount+1;
+ isDef(np,1)=1;
+ isDef(Na-n,1)=1;
+ endif
+end
+
+
 by=pi/L;
 for n=-Na:Na-1 
-
+ np=n+Na+1;
 
  for dGy=-2*nGy:2*nGy
        
       dGyp=dGy+1+2*nGy;
         twindle=exp(-1i*(n+.5)*by*dGy*a2);
         
-   if(n>=-ndef && n<ndef)
-
+     if(isDef(np,1))
     for k=1:nk
        if(k!=4 || n>=0)
        Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
