@@ -29,6 +29,7 @@ KapaUnit=zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
 
 for dGx=-2*nGx:2*nGx
     Gn=2*pi*dGx/a1;
+      dGxp=dGx+1+2*nGx;
     for dGy=-2*nGy:2*nGy
         Gm=dGy*pi/L;
         GnmR=sqrt(Gn*Gn+Gm*Gm)*R;
@@ -39,7 +40,6 @@ for dGx=-2*nGx:2*nGx
             for k=1:nk
                   KapaUnit(dGxp,dGyp,k)=(invepsb(k)+ff*(invepsa(k)-invepsb(k)))/(2*Na);
                   
-                  Kapa0Defect(1,1,k)=invepsb(k)/(2*Na);
             end
             
          else
@@ -102,7 +102,7 @@ for n=0:Na-1
  defcount=defcount+1;
  isDef(np,1)=1;
  isDef(Na-n,1)=1;
- endif
+ end
 end
 
 
