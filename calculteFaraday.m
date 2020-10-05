@@ -66,6 +66,7 @@ if(p==1)
     else
     if(geometry==1 && rec )
     FillKapaRectangleAntiSym(nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
+
   else
 
        FillKapaAntiSymNum(geometry,nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);

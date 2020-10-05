@@ -25,7 +25,7 @@ cell_size=a1*a2*Na*2;
 rect_size=2*Rx*2*Ry;
 
 fillx=2*Rx/a1;
-filly=Ry/L;
+filly=2*Ry/a2;
 
 bx=2*pi/a1;
 by=pi/L;
@@ -43,6 +43,7 @@ for dGx=-2*nGx:2*nGx
         tty=dGy*by*Ry;
      
         dGyp=dGy+1+2*nGy;
+        
   for k=1:nk
       if(dGx==0)
        four_coefx= (invepsb(k)+fillx*(invepsa(k)-invepsb(k)));
@@ -50,12 +51,12 @@ for dGx=-2*nGx:2*nGx
           four_coefx=(invepsa(k)-invepsb(k))*2*Rx/(a1)*sin(ttx)/(ttx);
        end
         
-        
          if(dGy==0)
-       four_coefy= (invepsb(k)+fillx*(invepsa(k)-invepsb(k)))/(2*Na);
+       four_coefy= (invepsb(k)+filly*(invepsa(k)-invepsb(k)))/(2*Na);
         else
-          four_coefy=(invepsa(k)-invepsb(k))*2*Ry/(a1)*sin(tty)/(tty)/(2*Na);
+          four_coefy=2*(invepsa(k)-invepsb(k))*2*Ry/(a1)*sin(tty)/(tty)/(2*Na);
        end
+      
        
         KapaUnit(dGxp,dGyp,k)=four_coefx*four_coefy;
 
@@ -80,7 +81,7 @@ KapaDefect=zeros(1,4*nGy+1,4)+1i*zeros(1,4*nGy+1,4);
 
 
 if(ndef>0)
- 
+
      for dGy=-2*nGy:2*nGy
         
         dGyp=dGy+1+2*nGy;
@@ -101,6 +102,7 @@ if(ndef>0)
  
 end
  
+
 Kapa=zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
 
 ndef
@@ -117,8 +119,11 @@ for n=0:Na-1
  endif
 end
 
+ dGxp=1+2*nGx;
+
 
 by=pi/L;
+
 for n=-Na:Na-1 
  np=n+Na+1;
 
@@ -126,14 +131,13 @@ for n=-Na:Na-1
        
       dGyp=dGy+1+2*nGy;
         twindle=exp(-1i*(n+.5)*by*dGy*a2);
-        
      if(isDef(np,1))
 
     for k=1:nk
        if(k!=4 || n>=0)
-       Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
+       Kapa(dGxp,dGyp,k)=  Kapa(dGxp,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
         else
-       Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)-KapaDefect(1,dGyp,k)*twindle;
+       Kapa(dGxp,dGyp,k)=  Kapa(dGxp,dGyp,k)-KapaDefect(1,dGyp,k)*twindle;
         end
      end
    else
@@ -150,7 +154,6 @@ for n=-Na:Na-1
         
     end
   end
-Kapa;
   
 end
 

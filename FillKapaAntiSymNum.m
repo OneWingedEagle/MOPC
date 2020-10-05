@@ -160,6 +160,8 @@ for n=0:Na-1
  endif
 end
 
+ dGxp=1+2*nGx;
+
 
 by=pi/L;
 for n=-Na:Na-1 
@@ -169,13 +171,13 @@ for n=-Na:Na-1
        
       dGyp=dGy+1+2*nGy;
         twindle=exp(-1i*(n+.5)*by*dGy*a2);
-        
      if(isDef(np,1))
+
     for k=1:nk
        if(k!=4 || n>=0)
-       Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
+       Kapa(dGxp,dGyp,k)=  Kapa(dGxp,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
         else
-       Kapa(1,dGyp,k)=  Kapa(1,dGyp,k)-KapaDefect(1,dGyp,k)*twindle;
+       Kapa(dGxp,dGyp,k)=  Kapa(dGxp,dGyp,k)-KapaDefect(1,dGyp,k)*twindle;
         end
      end
    else
@@ -192,7 +194,7 @@ for n=-Na:Na-1
         
     end
   end
-
   
 end
+
 

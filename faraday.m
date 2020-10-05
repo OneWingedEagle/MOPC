@@ -88,7 +88,7 @@ ndef=0;
 defstart=0;
 if(length(numbs)>1)
 ndef=numbs(2);
-defstart=idivide(Na/2);
+defstart=idivide(Na,2);
 end
 if(length(numbs)>2)
 defstart=numbs(3);
