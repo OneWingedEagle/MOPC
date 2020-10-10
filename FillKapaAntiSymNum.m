@@ -193,8 +193,7 @@ for n=-Na:Na-1
         
         
     end
-  end
-  
+
 end
 
 

@@ -34,7 +34,7 @@ for dGx=-2*nGx:2*nGx
         
         if(dGx==0&& dGy==0)
             for k=1:nk
-                if(k~=4)
+                if(k!=4)
                     Kapa(dGxp,dGyp,k)=1*(ff*invepsa(k)+(1-ff)*invepsb(k))+2*d11*(invepsa(k)-invepsb(k));
                 end
                 
@@ -44,7 +44,7 @@ for dGx=-2*nGx:2*nGx
             tt=2*ff*besselj(1,GnmR)/GnmR;
             
             for k=1:nk
-                if(k~=4)
+                if(k!=4)
                     Kapa(dGxp,dGyp,k)=tt*(invepsa(k)-invepsb(k));
                 end
             end

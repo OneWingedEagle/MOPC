@@ -99,7 +99,7 @@ if(p==1)
                         Gn=bx*n;
                         Gm=by*m;
 
-                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,1);
+                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,4);
                         
                         tt=tt+TT*exp(1i*(Gn*x1+Gm*y1));
                     end
