@@ -44,9 +44,13 @@ for dGx=-2*nGx:2*nGx
             end
             
          else
-            tt=ff*besselj(1,GnmR)/GnmR;
+        tt=ff*besselj(1,GnmR)/GnmR;
+
+            factb=0;
+             if(dGx==0)
             ttb=dGy*by*a2/2;
             factb=a2/(2*L)*sin(ttb)/(ttb);
+            end
             
             for k=1:nk
                     KapaUnit(dGxp,dGyp,k)= factb*invepsb(k)+tt*(invepsa(k)-invepsb(k))/(Na);;
@@ -132,7 +136,7 @@ for n=-Na:Na-1
        if(k!=4 || n>=0)
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
         else
-         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)-KapaUnit(:,dGyp,k)*twindle;
+         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
         end
      end
    

@@ -53,6 +53,7 @@ numbs = str2num(line);
 ndata=length(numbs)
 
 epsbx=numbs(1);
+gamab=0;
 if(ndata>1)
 epsby=numbs(2);
 epsbz=numbs(3);
@@ -62,6 +63,7 @@ end
 line=getNewDataLine(fid);
 numbs = str2num(line);
 epsax=numbs(1);
+gamaa=0;
 if(ndata>1)
 epsay=numbs(2);
 epsaz=numbs(3);
@@ -100,10 +102,14 @@ rotation=numbs(2);
 
 if(transmit>0)
 colT=colors(transmit);
+else
+colT=colors(1);
 end
 
 if(rotation>0)
-colR=colors(rotation);
+colR=colors(rotation+1);
+else
+colR=colors(2);
 end
 
 
@@ -128,13 +134,6 @@ plotWave=numbs(2);
 
 %=================
 
- nGy0=nGy;
-for ir=1:1
-
-inc_mode
-  colT=colors{ir+inc_mode}
-  colR=colors{ir+1+inc_mode}
-
 d1=0*ay;
 d2=ay/2-Ry+0*ay;
 
@@ -153,7 +152,7 @@ for p=1:1*cf*ndiv+1
 
     
     Fn(p)=wn1+dwn*(p-1);
-    k1=2*pi*Fn(p)/ay;
+    k1=sqrt(eps1)*2*pi*Fn(p)/ay;
      Fr_hom(p)=-180*gamab/sqrt(epsbx)*Na*Fn(p);
     
     [Ts Rs,Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,ax,ay,Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colR,theta,fi,rec);
@@ -216,8 +215,8 @@ if(rotation &&length(Tr)>1)
              axis([wn1,wn2,-90,90]);
              hold on
              
-            plot(Fn,Fr_hom,'+k');
-             hold on
+%            plot(Fn,Fr_hom,'+k');
+%             hold on
 
 end
             
@@ -233,4 +232,3 @@ end
 end
 
 
-end
