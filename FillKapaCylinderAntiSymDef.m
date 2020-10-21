@@ -94,6 +94,35 @@ if(ndef>0)
     end
  
 end
+
+eps1=1;
+eps3=1;
+
+
+
+if(d1>0)
+ KappaEnds=zeros(1,4*nGy+1,4)+1i*zeros(1,4*nGy+1,4);
+
+     for dGy=-2*nGy:2*nGy
+        
+        dGyp=dGy+1+2*nGy;
+
+        tt=dGy*by*a2/2;
+          
+          for k=1:3
+                if(dGy==0)
+                  KappaEnds(1,dGyp,k)=1./eps1*a2/(2*L);
+                else
+                  KappaEnds(1,dGyp,k)=1./eps1*a2/(2*L)*sin(tt)/(tt);
+             end
+         
+         end
+    
+        
+    end
+ 
+end
+ 
  
 Kapa=zeros(4*nGx+1,4*nGy+1,4)+1i*zeros(4*nGx+1,4*nGy+1,4);
 
@@ -120,7 +149,13 @@ for n=-Na:Na-1
  for dGy=-2*nGy:2*nGy
        
       dGyp=dGy+1+2*nGy;
-        twindle=exp(-1i*(n+.5)*by*dGy*a2);
+      
+      if(n<0)
+      sd=-d1;
+      else
+      sd=d1;
+      end
+        twindle=exp(-1i*((n+.5)*a2+sd)*by*dGy);
 
      if(isDef(np,1))
 
@@ -136,7 +171,7 @@ for n=-Na:Na-1
        if(k!=4 || n>=0)
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
         else
-         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
+         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)-KapaUnit(:,dGyp,k)*twindle;
         end
      end
    
@@ -145,6 +180,25 @@ for n=-Na:Na-1
         
     end
   end
+
+  
+  if(d1>0)
+  
+   for dGy=-2*nGy:2*nGy
+       
+      dGyp=dGy+1+2*nGy;
+        twindle1=exp(-1i*(d1/2)*by*dGy)+exp(-1i*(L+d1/2)*by*dGy);
+        twindle2=exp(-1i*(-d1/2)*by*dGy)+exp(-1i*(-L-d1/2)*by*dGy);
+twindle=twindle1+twindle2;
+
+     for k=1:3
+         Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KappaEnds(:,dGyp,k)*twindle;
+     end
+           
+    
+  end
+ 
+ end
   
 end
 

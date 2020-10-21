@@ -53,7 +53,6 @@ numbs = str2num(line);
 ndata=length(numbs)
 
 epsbx=numbs(1);
-gamab=0;
 if(ndata>1)
 epsby=numbs(2);
 epsbz=numbs(3);
@@ -63,7 +62,6 @@ end
 line=getNewDataLine(fid);
 numbs = str2num(line);
 epsax=numbs(1);
-gamaa=0;
 if(ndata>1)
 epsay=numbs(2);
 epsaz=numbs(3);
@@ -90,7 +88,7 @@ ndef=0;
 defstart=0;
 if(length(numbs)>1)
 ndef=numbs(2);
-defstart=idivide(Na,2);
+defstart=floor(Na/2);
 end
 if(length(numbs)>2)
 defstart=numbs(3);
@@ -100,17 +98,19 @@ numbs = str2num(line);
 transmit=numbs(1);
 rotation=numbs(2);
 
+
 if(transmit>0)
-colT=colors(transmit);
+colT=colors{transmit};
 else
-colT=colors(1);
+colT=colors{1};
 end
 
 if(rotation>0)
-colR=colors(rotation+1);
+colR=colors{rotation+1};
 else
-colR=colors(2);
+colR=colors{2};
 end
+
 
 
 line=getNewDataLine(fid);
@@ -134,8 +134,8 @@ plotWave=numbs(2);
 
 %=================
 
-d1=0*ay;
-d2=ay/2-Ry+0*ay;
+d1=ay;
+d2=d1;
 
 t1=cputime;
 

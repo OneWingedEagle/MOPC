@@ -16,7 +16,7 @@ global bE;
 
 w2c2=(k1)^2;
 
-L=(Na-1)*a2+2*(Ry+d);
+L=Na*a2+d;
 
 Lx1=2*nGx+1;
 Lx2=3*nGx+2;
@@ -101,7 +101,7 @@ if(p==1)
                         Gn=bx*n;
                         Gm=by*m;
 
-                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,4);
+                        TT=Kapa(n+2*nGx+1,m+2*nGy+1,1);
                         
                         tt=tt+TT*exp(1i*(Gn*x1+Gm*y1));
                     end
@@ -311,7 +311,7 @@ bN=zeros(dimx,1);
 disp('Computing matrix, step 2...');
 
     NN=zeros(dimx,dimx);
-
+    
 countG=0;
 
 for Gx=-nGx:nGx
@@ -435,22 +435,50 @@ for Gx=-nGx:nGx
 end
 
 
+amx2=0;
+if(p==-1)
+A2=zeros(2*nGx+1,nGy);
+uu=zeros(2*nGx+1,nGy);
+vv=zeros(2*nGx+1,nGy);
+for Gx=-nGx:nGx
+    Gxp=nGx+1+Gx;
+ for Gy=1:nGy
+        for k=1:nk
+         A2(Gxp,Gy)= A2(Gxp,Gy)+Anm(Gxp,Gy,k)*conj(Anm(Gxp,Gy,k));
+
+      end
+      
+      if(amx2<A2(Gxp,Gy))
+      amx2=A2(Gxp,Gy);
+      end
+  end
+end
+
+figure(14)
+plot(A2(2,:),'-g');
+%surf(sqrt(A2));
+hold on;
+
+end
+
 kp=numG*nk;
 kpp=(numG+2*nGx+1)*nk;
+
 for Gx=-nGx:nGx
     k=nGx+Gx;
-   
+   ords(k+1)=k;
+  
     for j=1:nk
         Tn(k+1,j)=x(kp+k*nk+j);
-        Tn2(k+1)= Tn2(k+1)+abs(Tn(k+1,j))^2;
+        Tn2(k+1)= Tn2(k+1)+Tn(k+1,j)*conj(Tn(k+1,j));
         
         Rn(k+1,j)=x(kpp+k*nk+j);
-        Rn2(k+1)= Rn2(k+1)+abs(Rn(k+1,j))^2;
+        Rn2(k+1)= Rn2(k+1)+Rn(k+1,j)*conj(Rn(k+1,j));
+        
     end
     
 
 end
-
 
 Ts=0;
 Rs=0;
@@ -509,10 +537,14 @@ for ix=1:Nx
         
         for Gx=-nGx:nGx
             
-            kxn=kx+Gx*bx;
+            kxn=Gx*bx;
             
             Gxp=nGx+1+Gx;
-            del=(Gx==0);
+            if(Gx==0)
+            del=1;
+          else 
+            del=0;
+            end
             for Gy=1:nGy
                 for j=1:nk
 
@@ -522,14 +554,14 @@ for ix=1:Nx
                 end
             end
             for j=1:nk
-                ff(ix,k,j)=ff(ix,k,j)+(y*Tn(Gxp,j)+(L-y)*(Rn(Gxp,j)+del*E0(j)));
+                ff(ix,k,j)=ff(ix,k,j)+y/L*Tn(Gxp,j)*exp(1i*kxn*x)*exp(1i*sqrt(k3^2-kxn2)*(y-L))+(1-y/L)*(Rn(Gxp,j)+del*E0(j))*exp(1i*kxn*x)*exp(1i*sqrt(k1^2-kxn2)*y);
             end
         end
         
     end
 end
 
-E1=ff/L+si;
+E1=ff+si;
 
 E2=real(E1);
 E2(:,:,1);
@@ -605,7 +637,6 @@ end
 
 ang0=atan(tn0);
 nan=0;
-
 tans1=zeros(nL,1);
 for k=1:nL
     
@@ -646,7 +677,7 @@ for k=2:nan
     
     tnp=tans(k-1);
     tn=tans(k);
-    angs(k)=-atan(tn)*180/pi;
+    angs(k)=-atan(tn);
 
     if(angs(k)>0)
   
@@ -662,7 +693,14 @@ end
 
 
 
-Fr=(angs(nan)-ang0);
+Fr=(angs(nan)-ang0)*180/pi;
+
+if(Fr>90)
+ Fr=Fr-180;
+ elseif(Fr<-90)
+ Fr=Fr+180;
+end
+
 
 end
 %Eout=sqrt(E2(1,nL,1)^2+E2(1,nL,2)^2+E2(1,nL,3)^2);
