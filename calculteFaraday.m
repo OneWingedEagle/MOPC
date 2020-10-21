@@ -249,11 +249,15 @@ if(p==1)
                          %% for Tn  
                          
                          i1=(countG-1)*nk+j;
-                         i2=(numG+n1p-1)*nk+k;
-                        MM((countG-1)*nk+j,(numG+n1p-1)*nk+k)= MM((countG-1)*nk+j,(numG+n1p-1)*nk+k)+FFT(j,k);
+                         j1=(numG+n1p-1)*nk+k;
+                        MM(i1,j1)= MM(i1,j1)+FFT(j,k);
+                      
                          %% for Rn  
-                        MM((countG-1)*nk+j,(numG+dd+n1p-1)*nk+k)= MM((countG-1)*nk+j,(numG+dd+n1p-1)*nk+k)+FFR(j,k);
-
+                         
+                         j2=(numG+dd+n1p-1)*nk+k;
+                         
+                        MM(i1,j2)= MM(i1,j2)+FFR(j,k);
+                        
                         end
                     end
                     

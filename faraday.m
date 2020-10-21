@@ -134,8 +134,8 @@ plotWave=numbs(2);
 
 %=================
 
-d1=ay;
-d2=d1;
+d1=0;
+d2=0;
 
 t1=cputime;
 
@@ -215,8 +215,8 @@ if(rotation &&length(Tr)>1)
              axis([wn1,wn2,-90,90]);
              hold on
              
-%            plot(Fn,Fr_hom,'+k');
-%             hold on
+           plot(Fn,Fr_hom,'+k');
+             hold on
 
 end
             
