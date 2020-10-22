@@ -108,7 +108,7 @@ for n=0:Na-1
  defcount=defcount+1;
  isDef(np,1)=1;
  isDef(Na-n,1)=1;
- endif
+ end
 end
 
  dGxp=1+2*nGx;
@@ -125,7 +125,7 @@ for n=-Na:Na-1
      if(isDef(np,1))
 
     for k=1:nk
-       if(k!=4 || n>=0)
+       if(k~=4 || n>=0)
        Kapa(dGxp,dGyp,k)=  Kapa(dGxp,dGyp,k)+KapaDefect(1,dGyp,k)*twindle;
         else
        Kapa(dGxp,dGyp,k)=  Kapa(dGxp,dGyp,k)-KapaDefect(1,dGyp,k)*twindle;
@@ -133,7 +133,7 @@ for n=-Na:Na-1
      end
    else
      for k=1:nk
-       if(k!=4 || n>=0)
+       if(k~=4 || n>=0)
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)+KapaUnit(:,dGyp,k)*twindle;
         else
          Kapa(:,dGyp,k)=Kapa(:,dGyp,k)-KapaUnit(:,dGyp,k)*twindle;
