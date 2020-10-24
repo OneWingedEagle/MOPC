@@ -6,7 +6,7 @@
 //GEOMETRY =0 indicates eliptical, GEOMETRY =1 is for rectangular
 //GEOMETRY 
 0
-.504  .504
+.504    .504
 //Rx Ry
 //fi  anticlockiwise angle of elipse axis with x-axis.  angle is given in degrees.
 0
@@ -22,18 +22,18 @@
 1.0	1.0
 //epsilon of the back ground. The first 3 are the elpsion sin the x , y and z direction and the forth one is the //complex part.
 //EPS_BACKGROUND
-2.72 	2.72	2.72 	0.03
+2.72 	2.72	2.72 	0.0
 //2.75 	2.75	2.75 	0.05
 //epsilon of the bars. The first 3 are the elpsion sin the x , y and z direction and the forth one is the complex //part.
 //EPS_BAR
 1. 	1.	1. 	0.0
 //N bars *  num defects * start def
-4
+16
 //Transmittivity  FaradayRotation
-4 4
+2   2
 // WN1	WN2 DIVISION
-.6  .7 18
-3 40
+.5  .51111    4
+5 150
 //PlotFouriesSeries   Plot3DVectors
 0	0
 
