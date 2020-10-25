@@ -1,6 +1,7 @@
 function [Ts Rs Fr]=calculteFaraday(geometry,epsa,epsb,eps1,eps3,a1,a2,...
 Rx,Ry,d1,d2,Na,nGx,nGy,k1,p,plotFT,plotWave,colorAng,theta,fi,rec)
 
+
 nk=size(epsb,2);
 
 
@@ -27,8 +28,16 @@ numG=(Lx1)*nGy;
 
 dd=Lx1;
 
-
+global inc_mode;
+if(inc_mode==0)
 E0=[0 0 1]';
+else
+E0=[1 0 0]';
+end
+
+if(nk==1) 
+E0=[1];
+end
 
 
 kx=k1*sind(theta);
@@ -51,8 +60,11 @@ if(p==1)
         FillKapaTriang(nGx,nGy,epsa,epsb,L,R,Na,a1,a2);  %triangular
         %lattivce not implemented properly.
     elseif (geometry==0 && Rx==Ry)
-        FillKapaCylinderAntiSymDef(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1); 
-
+        if(nk==3)
+         FillKapaCylinderAntiSymDef(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1); 
+       else
+        FillKapaCylinderSym(nGx,nGy,epsa,epsb,L,Rx,Na,a1,a2,d1);
+        end
     else
     if(geometry==1 && rec )
     FillKapaRectangleAntiSym(nGx,nGy,epsa,epsb,L,Rx,Ry,Na,a1,a2,d1,fi);
@@ -116,32 +128,35 @@ if(p==1)
 
     disp('Computing matrix, step 1...');
     
-    dimx=nk*(numG+2*(Lx1));
+    
    
-    MM=  single(zeros(dimx,dimx));
+    MM=  zeros(dimx,dimx);
     
 
         
-    bE=zeros(nk*(numG+2*(Lx1)),1);
+    bE=zeros(dimx,1);
     
     countG=0;
     
     
-    for Gx=-nGx:nGx
-        for Gy=1:nGy
+    nM=nGy;
+    nN=nGx;
+    
+    for n=-nN:nN
+        for m=1:nM
             
             countG=countG+1;
             countG1=0;
             
-            for Gx1=-nGx:nGx
+            for n1=-nN:nN
                 
-                dGxp=Lx1+Gx-Gx1;
-                Gx1p=nGx+1+Gx1;
-                Gx1pp=Lx2+Gx1;
+                ndiff=Lx1+n-n1;
+                n1p=nN+1+n1;
+                n1pp=Lx2+n1;
 
 
                 
-                kxn1=kx+Gx1*bx;
+                kxn1=kx+n1*bx;
                % kxn1=0;
                 
                 kxn2=kxn1^2;
@@ -151,18 +166,19 @@ if(p==1)
                 tempR=zeros(nk,nk);
                 tempE=zeros(nk,nk);
                 
-                for Gy1=1:nGy
-                    kym=Gy1*by;
-                    dGyp=Ly1+(Gy-Gy1);
-                    sGyp=Ly1+Gy+Gy1;
+                for m1=1:nM
+                    kym=m1*by;
+                    mdiff=Ly1+(m-m1);
+                    msum=Ly1+m+m1;
                     countG1=countG1+1;
                          
        
+       
                     
-                    Kapas(1:4)=Kapa(dGxp,sGyp,1:4);
+                    Kapas(1:4)=Kapa(ndiff,msum,1:4);
       
                                         
-                    Kapad(1:4)=Kapa(dGxp,dGyp,1:4);
+                    Kapad(1:4)=Kapa(ndiff,mdiff,1:4);
                     
                     KapTenss=[Kapas(1) 0 1i*Kapas(4); 0 Kapas(2) 0 ;
                         -1i*Kapas(4) 0  Kapas(3)];
@@ -186,18 +202,18 @@ if(p==1)
                     
                     Akg1=zeros(3,3);
                     
-                    if(mod(Gy1,2)==0)
-                        Akg1(1,2)=-1i*kxn1*pph/Gy1;
+                    if(mod(m1,2)==0)
+                        Akg1(1,2)=-1i*kxn1*pph/m1;
                     else
-                        Akg1(1,2)=1i*kxn1*pph/Gy1;
+                        Akg1(1,2)=1i*kxn1*pph/m1;
                     end
                     
                     Akg1(2,1)=Akg1(1,2);
                     
-                    if(mod(Gy1,2)==0)
-                        Akg1(2,2)=kxn2*pph/Gy1;
+                    if(mod(m1,2)==0)
+                        Akg1(2,2)=kxn2*pph/m1;
                     else
-                        Akg1(2,2)=-kxn2*pph/Gy1;
+                        Akg1(2,2)=-kxn2*pph/m1;
                     end
                     
                     
@@ -212,10 +228,10 @@ if(p==1)
                     
                    Akg2=zeros(3,3);
                     
-                    Akg2(1,2)=-1i*kxn1*pph/Gy1;
+                    Akg2(1,2)=-1i*kxn1*pph/m1;
          
                     Akg2(2,1)=Akg2(1,2);
-                    Akg2(2,2)=kxn2*pph/Gy1;
+                    Akg2(2,2)=kxn2*pph/m1;
                    Akg2(3,3)=Akg2(2,2);
 
 
@@ -224,7 +240,7 @@ if(p==1)
                     
                    tempR=tempR-dKapTens2;
                     
-                    if(Gx1==0)
+                    if(n1==0)
                         
                        tempE=tempE-dKapTens2;
                     end
@@ -243,7 +259,7 @@ if(p==1)
                 
                 
                 
-                if(Gx1==0)
+                if(n1==0)
                     v=tempE*E0;
                     for k=1:nk
                         bE((countG-1)*nk+k)=v(k);
@@ -255,32 +271,32 @@ if(p==1)
                 for j=1:nk
                     for k=1:nk
                         
-                        MM((countG-1)*nk+j,(numG+Gx1p-1)*nk+k)=tempT(j,k);
-                        MM((countG-1)*nk+j,(numG+dd+Gx1p-1)*nk+k)=tempR(j,k);
+                        MM((countG-1)*nk+j,(numG+n1p-1)*nk+k)=tempT(j,k);
+                        MM((countG-1)*nk+j,(numG+dd+n1p-1)*nk+k)=tempR(j,k);
                         
                     end
                 end
                 
                 
                 
-                if(Gx==Gx1)
+                if(n==n1)
                     for k=1:nk
                         if(k~=2)
                             
-                            MM((Gx1p+numG-1)*nk+k,((Gx1p-1)*nGy+Gy-1)*nk+k)=pi*Gy;
+                            MM((n1p+numG-1)*nk+k,((n1p-1)*nM+m-1)*nk+k)=pi*m;
                         end
                     end
                     
-                    if(mod(Gy,2)==0)
+                    if(mod(m,2)==0)
                         for k=1:nk
                             if(k~=2)
-                                MM((Gx1pp+numG-1)*nk+k,((Gx1p-1)*nGy+Gy-1)*nk+k)=pi*Gy;
+                                MM((n1pp+numG-1)*nk+k,((n1p-1)*nM+m-1)*nk+k)=pi*m;
                             end
                         end
                     else
                         for k=1:nk
                             if(k~=2)
-                                MM((Gx1pp+numG-1)*nk+k,((Gx1p-1)*nGy+Gy-1)*nk+k)=-pi*Gy;
+                                MM((n1pp+numG-1)*nk+k,((n1p-1)*nM+m-1)*nk+k)=-pi*m;
                             end
                         end
                     end
@@ -298,19 +314,12 @@ if(p==1)
 end
 
 
-bN=zeros(nk*(numG+2*(Lx1)),1);
+bN=zeros(dimx,1);
 
 disp('Computing matrix, step 2...');
 
-    NN=single(zeros(nk*(numG+2*(Lx1))));
-
-    for Gx=1:size(NN,1)
-        for Gy=1:size(NN,2)
-            NN(Gx,Gy)=single(1e-10+1i*1e-10);
-        end
-    end
-
-
+    NN=zeros(dimx,dimx);
+    
 countG=0;
 
 for Gx=-nGx:nGx
@@ -412,7 +421,6 @@ disp('solving matrix...');
 
 
   NN=NN+MM;   
-
 
   x=linsolve(NN,bN);
 
@@ -629,8 +637,11 @@ end
 
 if(nk==3)
 
+if(inc_mode==0)
 tn0=E2(1,1,1)/E2(1,1,3);
-
+else
+tn0=-E2(1,1,3)/E2(1,1,1);
+end
 
 ang0=atan(tn0);
 nan=0;
@@ -643,7 +654,11 @@ for k=1:nL
     magn=sqrt(Vx^2+Vz^2);
     
     if( magn>-.1)
+    if(inc_mode==0)
     tans1(k)=Vx/Vz;
+else
+    tans1(k)=-Vz/Vx;
+end
         nan=nan+1;
     else
         tans1(k)=1e10;
@@ -686,7 +701,7 @@ end
 
 
 
-Fr=(angs(nan))*180/pi;
+Fr=(angs(nan)-ang0)*180/pi;
 
 if(Fr>90)
  Fr=Fr-180;
@@ -711,3 +726,4 @@ if(plotWave)
 end
 
 end
+
